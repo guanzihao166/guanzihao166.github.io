@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>exPansion AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+        
+        body {
+            background-color: #f7f9fc;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(77, 139, 249, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(77, 139, 249, 0.05) 0%, transparent 20%),
+                linear-gradient(135deg, rgba(77, 139, 249, 0.02) 0%, rgba(120, 204, 255, 0.02) 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 20%, rgba(77, 139, 249, 0.03) 0%, transparent 25%),
+                radial-gradient(circle at 80% 80%, rgba(120, 204, 255, 0.03) 0%, transparent 25%),
+                url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%234d8bf9' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+            animation: backgroundAnimation 30s linear infinite;
+        }
+        
+        @keyframes backgroundAnimation {
+            0% {
+                background-position: 0 0;
+            }
+            100% {
+                background-position: 100px 100px;
+            }
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px 40px;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .logo-text {
+            font-size: 22px;
+            font-weight: bold;
+            margin-left: 8px;
+            color: #4d8bf9;
+        }
+        
+        .Blt-badge {
+            background-color: #4d8bf9;
+            color: white;
+            font-size: 12px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+        }
+        
+        .nav {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .nav-item {
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+            position: relative;
+            text-decoration: none;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #4d8bf9, #78ccff);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+        
+        .nav-item:hover::after {
+            width: 100%;
+        }
+        
+        .nav-item:hover {
+            color: #4d8bf9;
+            transform: translateY(-2px);
+        }
+        
+        .nav-item.active {
+            font-weight: bold;
+            color: #4d8bf9;
+        }
+        
+        .right-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .right-menu-item {
+            font-size: 14px;
+            color: #666;
+            cursor: pointer;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 5px 8px;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        /* 添加悬停效果 */
+        .right-menu-item:hover {
+            background-color: rgba(0, 0, 0, 0.04);
+        }
+        
+        /* 语言选择器样式 */
+        .language-selector {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .language-selector .right-menu-item {
+            padding-right: 20px;
+        }
+        
+        /* 添加下拉箭头 */
+        .language-selector .right-menu-item::after {
+            content: '';
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #666;
+        }
+        
+        /* 下拉菜单样式 */
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            min-width: 120px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .language-selector:hover .language-dropdown {
+            display: block;
+        }
+        
+        .language-option {
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            color: #333;
+            transition: all 0.2s ease;
+        }
+        
+        .language-option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .language-option.active {
+            color: #4d8bf9;
+        }
+        
+        /* 添加选中标记 */
+        .language-option.active::before {
+            content: '✓';
+            margin-right: 8px;
+            color: #4d8bf9;
+        }
+        
+        /* 切换节点样式 */
+        .node-switcher {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .node-switcher .right-menu-item {
+            padding-right: 20px;
+        }
+        
+        /* 添加下拉箭头 */
+        .node-switcher .right-menu-item::after {
+            content: '';
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #666;
+        }
+        
+        /* 节点下拉菜单样式 */
+        .node-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            display: none;
+            z-index: 1000;
+            padding: 8px 0;
+        }
+        
+        .node-switcher:hover .node-dropdown {
+            display: block;
+        }
+        
+        .node-option {
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            color: #333;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        
+        .node-option:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .node-option .node-status {
+            margin-right: 8px;
+        }
+        
+        .node-option .node-speed {
+            margin-left: auto;
+            font-size: 12px;
+            color: #52c41a;
+        }
+        
+        /* 修改图标样式 */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            margin-right: 6px;
+        }
+        
+        .icon svg {
+            width: 14px;
+            height: 14px;
+        }
+        
+        /* 修改卡片容器样式 */
+        .hero {
+            display: flex;
+            padding: 40px;
+            min-height: 400px;
+            position: relative;
+            overflow: visible;
+            align-items: center;
+            background: transparent;
+            border-radius: 20px;
+            margin: 20px 40px;
+            gap: 50px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(77, 139, 249, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(120, 204, 255, 0.03) 0%, transparent 40%);
+            z-index: 0;
+            animation: heroBackground 15s infinite alternate ease-in-out;
+        }
+        
+        @keyframes heroBackground {
+            0% {
+                background-position: 0% 0%;
+            }
+            100% {
+                background-position: 100% 100%;
+            }
+        }
+        
+        .hero-content {
+            flex: 1;
+            padding-right: 40px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .hero-title {
+            font-size: 42px;
+            color: #4d8bf9;
+            margin-bottom: 30px;
+            font-weight: bold;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .hero-title::after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #4d8bf9, #78ccff);
+            bottom: -10px;
+            left: 0;
+        }
+        
+        .hero-description {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.8;
+            max-width: 600px;
+            position: relative;
+            background: transparent;
+            padding: 0;
+            border-radius: 0;
+            backdrop-filter: none;
+            box-shadow: none;
+            margin-right: 0;
+            border-left: none;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+        
+        .hero-description:hover {
+            transform: translateX(10px);
+        }
+        
+        .typing-text {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 40px 0;
+            min-height: 24px;
+            position: relative;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            color: #4d8bf9;
+            background: linear-gradient(90deg, #4d8bf9, #78ccff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+        
+        .typing-text::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -1px;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, #4d8bf9, transparent);
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .primary-button {
+            background-color: #4d8bf9;
+            color: white;
+            border: none;
+        }
+        
+        .secondary-button {
+            background-color: white;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+        
+        .hero-image {
+            flex: 1;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+            perspective: 1500px;
+            transform-style: preserve-3d;
+            padding-right: 20px;
+        }
+        
+        /* 修改卡片样式 */
+        .features-card {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 25px 35px rgba(0, 0, 0, 0.08);
+            padding: 25px 30px;
+            width: 100%;
+            max-width: 580px; /* 增加卡片宽度 */
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            transform: perspective(1500px) rotateX(1deg) rotateY(-8deg) rotateZ(0deg); /* 减小初始倾斜角度 */
+            transform-style: preserve-3d;
+            transform-origin: center center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            will-change: transform;
+        }
+        
+        /* 调整卡片内容布局，减少内容高度 */
+        .feature-item {
+            display: flex;
+            margin-bottom: 15px; /* 减少项目间距 */
+            transition: all 0.2s ease-out;
+            position: relative;
+            padding: 4px 0; /* 减少内边距 */
+            transform: translateZ(0);
+        }
+        
+ 
+        
+        /* 优化悬停效果 */
+        .features-card:hover {
+            transform: perspective(1500px) rotateX(0) rotateY(-2deg) rotateZ(0deg); /* 保留轻微倾斜感 */
+            box-shadow: 0 30px 50px rgba(77, 139, 249, 0.12);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease-out;
+        }
+        
+        /* 添加鼠标跟随效果，但更加柔和 */
+        .features-card {
+            cursor: default;
+        }
+        
+        .feature-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-size: 16px;
+            background: rgba(77, 139, 249, 0.1);
+            color: #4d8bf9;
+        }
+        
+        .feature-content {
+            flex: 1;
+            padding-top: 3px;
+        }
+        
+        .feature-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #333;
+        }
+        
+        .feature-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        .features-card:hover .feature-item:hover {
+            transform: translateX(5px);
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .features-card:hover .feature-item:hover .feature-title {
+            transform: scale(1.05);
+            color: #4d8bf9;
+        }
+        
+        .features-card:hover .feature-item:hover .feature-description {
+            transform: scale(1.02);
+            color: #666;
+        }
+        
+        .features-card:hover .card-title {
+            transform: scale(1.05);
+            color: #4d8bf9;
+        }
+        
+        .feature-icon.yellow {
+            background-color: #fef6e5;
+            color: #fbb73c;
+        }
+        
+        .feature-icon.blue {
+            background-color: #e9f6fe;
+            color: #4d8bf9;
+        }
+        
+        .feature-icon.pink {
+            background-color: #feeaef;
+            color: #f75d81;
+        }
+        
+        .feature-icon.green {
+            background-color: #e5f7f0;
+            color: #20b787;
+        }
+        
+        .feature-icon.purple {
+            background-color: #f0eafd;
+            color: #8067dc;
+        }
+        
+        .feature-icon.red {
+            background-color: #e74c3c;
+            color: #e74c3c;
+        }
+        
+        .feature-content {
+            flex: 1;
+        }
+        
+        .models-section {
+            padding: 20px 40px 60px;
+        }
+        
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .models-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .models-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .model-item {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: transform 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .model-item img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            transition: transform 0.3s;
+        }
+        
+        .model-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .model-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .model-item:hover::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="20" height="20" x="0" y="0" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="20" y="0" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="40" y="0" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="60" y="0" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="80" y="0" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="0" y="20" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="20" y="20" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="40" y="20" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="60" y="20" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="80" y="20" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="0" y="40" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="20" y="40" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="40" y="40" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="60" y="40" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="80" y="40" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="0" y="60" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="20" y="60" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="40" y="60" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="60" y="60" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="80" y="60" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="0" y="80" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="20" y="80" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="40" y="80" fill="%234d8bf9" opacity="0.1"/><rect width="20" height="20" x="60" y="80" fill="%234d8bf9" opacity="0.05"/><rect width="20" height="20" x="80" y="80" fill="%234d8bf9" opacity="0.1"/></svg>');
+            opacity: 0.8;
+            z-index: 0;
+        }
+
+        .advantages {
+            padding: 60px 40px;
+            text-align: center;
+        }
+        
+        .advantages-title {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 50px;
+        }
+        
+        .advantage-timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .advantage-timeline::before {
+            content: "";
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: #eaeaea;
+        }
+        
+        .advantage-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            text-align: left;
+            position: relative;
+        }
+        
+        .advantage-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            background: #fff;
+            border: 2px solid;
+            margin-left: -15px;
+            z-index: 2;
+            position: relative;
+        }
+        
+        .advantage-icon.blue {
+            color: #4d8bf9;
+            border-color: #4d8bf9;
+        }
+        
+        .advantage-icon.green {
+            color: #20b787;
+            border-color: #20b787;
+        }
+        
+        .advantage-icon.yellow {
+            color: #fbb73c;
+            border-color: #fbb73c;
+        }
+        
+        .advantage-icon.orange {
+            color: #ff7846;
+            border-color: #ff7846;
+        }
+        
+        .advantage-icon.purple {
+            color: #8067dc;
+            border-color: #8067dc;
+        }
+        
+        .advantage-icon.pink {
+            color: #f75d81;
+            border-color: #f75d81;
+        }
+        
+        .advantage-icon.red {
+            color: #e74c3c;
+            border-color: #e74c3c;
+        }
+        
+        .advantage-content {
+            flex: 1;
+        }
+        
+        .advantage-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        
+        .advantage-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #f7f9fc;
+            padding: 60px 40px 30px;
+            margin-top: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(77, 139, 249, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(120, 204, 255, 0.03) 0%, transparent 40%);
+            z-index: 0;
+        }
+        
+        .footer-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .footer-top {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .footer-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .footer-subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .contact-button {
+            background-color: #4d8bf9;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .contact-button:hover {
+            background-color: #3a78e7;
+        }
+        
+        .footer-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 30px;
+            border-top: 1px solid #eee;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-link {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .footer-link:hover {
+            color: #4d8bf9;
+        }
+        
+        .footer-copyright {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+        }
+        
+        .disclaimer {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+            max-width: 800px;
+        }
+        
+        /* Floating Buttons */
+        .floating-buttons {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            z-index: 100;
+        }
+        
+        .floating-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(77, 139, 249, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .floating-button::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(77, 139, 249, 0.1), rgba(120, 204, 255, 0.1));
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .floating-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(77, 139, 249, 0.2);
+        }
+        
+        .floating-button:hover::before {
+            opacity: 1;
+        }
+        
+        .floating-button svg {
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .floating-button:hover svg {
+            transform: scale(1.1);
+            color: #4d8bf9;
+        }
+        
+        /* Popup Styles */
+        .popup {
+            position: fixed;
+            right: 90px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            z-index: 99;
+            display: none;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(77, 139, 249, 0.1);
+        }
+        
+        .popup::before {
+            content: '';
+            position: absolute;
+            right: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-left: 10px solid rgba(255, 255, 255, 0.95);
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+        
+        #api-popup img {
+            max-width: 100%;
+            display: block;
+        }
+        
+        .notification-popup {
+            width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .popup-header {
+            background: linear-gradient(90deg, #4d8bf9, #78ccff);
+            color: white;
+            padding: 15px 20px;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 15px 15px 0 0;
+        }
+        
+        /* 添加滚动条样式 */
+        .popup-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .popup-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 3px;
+        }
+        
+        .popup-content::-webkit-scrollbar-thumb {
+            background: rgba(77, 139, 249, 0.3);
+            border-radius: 3px;
+        }
+        
+        .popup-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(77, 139, 249, 0.5);
+        }
+        
+        .notification-item {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .notification-dot {
+            color: #ff0000;
+            margin-right: 10px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+        
+        .notification-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .notification-message {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #555;
+        }
+        
+        .highlight {
+            color: #000;
+            font-weight: 500;
+        }
+        
+        .date {
+            color: #999;
+            font-size: 12px;
+            display: block;
+            margin-top: 5px;
+        }
+        
+        .notification-button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .notification-button {
+            padding: 8px 20px;
+            border-radius: 8px;
+            border: none;
+            background: linear-gradient(90deg, #4d8bf9, #78ccff);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .notification-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(77, 139, 249, 0.2);
+        }
+        
+        .notification-button.secondary {
+            background: #f0f0f0;
+            color: #666;
+        }
+        
+        .notification-button.secondary:hover {
+            background: #e5e5e5;
+        }
+
+        /* 添加动态彩色边框 */
+        .features-card .rainbow-border {
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            z-index: -2;
+            border-radius: 17px;
+            background: linear-gradient(45deg, 
+                #4d8bf9, #78ccff, #20b787, #fbb73c, #f75d81, #8067dc, #4d8bf9);
+            background-size: 400% 400%;
+            animation: rainbowBorder 12s ease infinite;
+            opacity: 0.7;
+            filter: blur(3px);
+        }
+        
+        @keyframes rainbowBorder {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* 添加动态粒子效果 */
+        .features-card .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .features-card .particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(77, 139, 249, 0.2);
+            animation: particleFloat 20s infinite linear;
+        }
+
+        .features-card .particle:nth-child(1) {
+            top: 10%;
+            left: 20%;
+            animation-duration: 15s;
+            animation-delay: 0s;
+        }
+
+        .features-card .particle:nth-child(2) {
+            top: 40%;
+            left: 80%;
+            width: 4px;
+            height: 4px;
+            animation-duration: 18s;
+            animation-delay: 1s;
+            background-color: rgba(120, 204, 255, 0.2);
+        }
+
+        .features-card .particle:nth-child(3) {
+            top: 70%;
+            left: 10%;
+            width: 5px;
+            height: 5px;
+            animation-duration: 12s;
+            animation-delay: 2s;
+            background-color: rgba(32, 183, 135, 0.2);
+        }
+
+        .features-card .particle:nth-child(4) {
+            top: 30%;
+            left: 60%;
+            width: 3px;
+            height: 3px;
+            animation-duration: 20s;
+            animation-delay: 3s;
+            background-color: rgba(251, 183, 60, 0.2);
+        }
+
+        .features-card .particle:nth-child(5) {
+            top: 80%;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            animation-duration: 16s;
+            animation-delay: 4s;
+            background-color: rgba(247, 93, 129, 0.2);
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-15px) translateX(8px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(0) translateX(15px) rotate(180deg);
+            }
+            75% {
+                transform: translateY(15px) translateX(8px) rotate(270deg);
+            }
+            100% {
+                transform: translateY(0) translateX(0) rotate(360deg);
+            }
+        }
+
+        /* 修改API图片弹窗样式 */
+        #api-popup {
+            width: 280px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.98);
+        }
+
+        #api-popup img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 优化弹窗显示效果 */
+        .popup {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-50%) translateX(20px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .popup.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(0);
+        }
+
+        /* 添加弹窗显示动画 */
+        @keyframes popupFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50%) translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(-50%) translateX(0);
+            }
+        }
+
+        /* 添加动态背景效果 */
+        .dynamic-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(45deg, rgba(77, 139, 249, 0.05), rgba(120, 204, 255, 0.05));
+            animation: floatAnimation 20s infinite linear;
+        }
+
+        .floating-circle:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: 10%;
+            left: 5%;
+            animation-duration: 25s;
+        }
+
+        .floating-circle:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 60%;
+            right: 10%;
+            animation-duration: 20s;
+            animation-delay: -5s;
+        }
+
+        .floating-circle:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            top: 30%;
+            right: 20%;
+            animation-duration: 15s;
+            animation-delay: -10s;
+        }
+
+        @keyframes floatAnimation {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(50px, 25px) rotate(90deg);
+            }
+            50% {
+                transform: translate(25px, 50px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-25px, 25px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* 添加网格背景 */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(77, 139, 249, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(77, 139, 249, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -2;
+            animation: gridMove 15s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% {
+                transform: translate(0, 0);
+            }
+            100% {
+                transform: translate(30px, 30px);
+            }
+        }
+
+        /* 添加光点效果 */
+        .light-dots {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(77, 139, 249, 0.3);
+            border-radius: 50%;
+            animation: dotFloat 3s ease-in-out infinite;
+        }
+
+        .light-dots:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .light-dots:nth-child(2) { top: 40%; right: 15%; animation-delay: 0.5s; }
+        .light-dots:nth-child(3) { bottom: 30%; left: 20%; animation-delay: 1s; }
+        .light-dots:nth-child(4) { bottom: 20%; right: 25%; animation-delay: 1.5s; }
+
+        @keyframes dotFloat {
+            0%, 100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: translateY(-15px) scale(1.2);
+                opacity: 0.6;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 添加动态背景 -->
+    <div class="dynamic-background">
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="floating-circle"></div>
+        <div class="grid-background"></div>
+        <div class="light-dots"></div>
+        <div class="light-dots"></div>
+        <div class="light-dots"></div>
+        <div class="light-dots"></div>
+    </div>
+    
+    
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">exPansion AI <span class="Blt-badge">Blt</span></h1>
+                <p class="hero-description">致力于为开发者提供快速、便捷的 Web API 接口调用方案，打造稳定易于使用的 API 接口平台，一站式集成几乎所有AI大模型。</p>
+                <div class="typing-text" id="typing-text"></div>
+                <div class="buttons">
+                    <a href="https://api.cnmai.top/token" class="button primary-button">创建工作台</a>
+<a href="https://gpt-best.apifox.cn/doc-3530850" class="button secondary-button">API文档</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="features-card">
+                    <!-- 添加动态彩色边框 -->
+                    <div class="rainbow-border"></div>
+                    
+                    <!-- 添加动态光斑效果 -->
+                    <div class="light-spots">
+                        <div class="light-spot"></div>
+                        <div class="light-spot"></div>
+                        <div class="light-spot"></div>
+                    </div>
+                    
+                    <!-- 添加动态粒子效果 -->
+                    <div class="particles">
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                    </div>
+                    
+                    <h3 class="card-title">专业运营</h3>
+                    <p style="font-size: 14px; color: #555; margin-bottom: 25px; line-height: 1.6; position: relative; z-index: 1;">我们致力于提供可持续高质量的服务，运用先进的技术架构确保API服务的稳定性与高可用性。</p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon yellow">$</div>
+                        <div class="feature-content">
+                            <div class="feature-title">按量付费</div>
+                            <div class="feature-description">根据实际消耗计费，余额不过期，灵活充值，灵活高效。</div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon blue">C</div>
+                        <div class="feature-content">
+                            <div class="feature-title">广泛支持</div>
+                            <div class="feature-description">覆盖OpenAI官方高达多款开源扩展模型</div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon pink">D</div>
+                        <div class="feature-content">
+                            <div class="feature-title">透明计费</div>
+                            <div class="feature-description">提供详细的消费明细，价格透明，无隐性消费。</div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon green">C</div>
+                        <div class="feature-content">
+                            <div class="feature-title">超高开发</div>
+                            <div class="feature-description">默认支持大部分用户的开发需求，若有更高需求，请联系客服进行开通。</div>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon purple">S</div>
+                        <div class="feature-content">
+                            <div class="feature-title">高稳定性</div>
+                            <div class="feature-description">提供公开节点，记录响应耗时情况，稳定性领先市面中同类产品，确保提供可靠服务。</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="models-section">
+            <h2 class="section-title">我们已经完全支持OpenAI的全部模型、以及国产各种大模型</h2>
+            <div class="models-container">
+                <div class="models-row">
+                    <div class="model-item">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAABIRJREFUWEflWE1IlFEUPR8kZWCppYsys6KslHQRNBupEZzANkUGtbAfF4m10IUtWtgiFy1yoYsSg9RyUZBRG4VGaJRaTNBCpTILa4rRheJfRhoJX5xn9+M5WPMcp9HorYb33vfueefec++dZ0EbGU/KzsDCWcDKBZCor8Xg9wRgd8NGc+Bw/R2xZ/FHhq8iET++PwKsQzEAYmDC7kTc6mMBd+3EHEBvmW/lgBP8dmfAU++2MrwXzgJoMrjWcmw5Z2V4yzoB6+ByWA9v0+4ig+PLIIjw2OZ2TBCgbbp7Ofb9HwBdSTuxeU2yIrjv6yDeTAWjRvaSGPSk7ENVZhHS4jfMA0SAl163RAVoxACLNrlwPasYfVNB1A60wT/+HutWxcOVvAsVO44oRluH/GqOgF+Mv1d7FjsiAkijz/KqMTg9ikL/tXk26W4CF1Z5gT0JaWoPgZZ2NyA4M2aMc9EA9yakoXx7ITypOch7VuUYS1uTjOvZxXAl7cLgzBiuvn0A70ivA4SMX8kswuSPbzjiv4Yvs9NGII0BkjUyQ2AcdNnJl7XKheU7ClGSno+p2Wnl7sbPvgWN83Jtrst4OORH5euW6AJsd11WbqNxioMMECBdem9/BZo++xQ4YYZxeC7dDe9wD6r7W515ssj5bR0XoweQxuhWKpOBf39/hTpcAHKdvzlE2XQzRcHvCLrx01PUfWhX6w25pTj1stZINEYufp5XjeD0qANiIYBX+1tRlXlcxSAvwctwMDav7D6BgpR96gzvSI8Kh6gC/FhwQ92eLuQIBUhG2LdxnUpVYpj9hrqBdoclhgLnRdE5vkojoYRlkAwwpfwJIA3TxboyJSzIZt1Am6N2mWdc/k5MenCGBcjNve4aFeyiPDKYsCpeuYnK1GNQDhfGmGpK0t24/SsGuX4rtxQHknaCLIYbRgBrsopRkJqjANGFZLUm+7SqFoyprIQtTnzqAAW4CIP5j9+L8pm09Vy5EFgjgMx1FAqTLINfShYNEaht2/PmJWeuj1s7LxXpwgiN698xaQSQHzMPSoCHxhVdSLaeDPcopZZszVc1Wk9FzJUCUBJ21BikId6YyZhCICB2ucxtMifNAytM5au7KqmLi8WlAlCEopfKJTOoC4UxSCPHN7kUY8GZUWyJ36iAifsZd2RSrzYEyAuSzQ5NdH8SirGLRXm8taQTMkMQ/rF3Tspg/LFHJKMdI704393gVA9mArZj7IJC09KSGRQ36VUi9FCpvwTJvMkQ4GWk/nI/GwVWnah3MzxcYsc//g6Nn3yqoyEY5jSuMe7IGlst6fm4zg6GtZlsmgKTyxu7WD6g66Rj1hkkAD0Guaa727T2hnpl0QD1RMx0oTqY1BzFIpn1Dvcq4XCNlyGr0gWFqxoRJ2qTg8kqAcm/O37DEJD/KyZn/FWAcjhTEFmL5A9STABGytSS00y0DZuex9etCcBab/pBbPfZk//E89vKfsCky1bmI6bdFfDUH9If0R+vnJdWuwtxq486j+gS+HPv1TZdnht74diTALoBqzngudksmH4CDE+2T+e5VJwAAAAASUVORK5CYII=" alt="AI Model 1">
+                    </div>
+                    <div class="model-item">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAAXNSR0IArs4c6QAABCxJREFUWEflmT1MVEEUhc+lABPxJ9FIoEJNpIKYSAONULDYaCBSKQaoAFsipQZLEyxlqQAFKxWCDT8Fa8HaQIJQYYJSQTASMUIiFDvmzHjZx2ZxB3bBNU6yCZk37803595zZzIIAq03ZJqMmGYYXIXgbPDZkf9tsAHBnBjpb52QAZ1P+EdflTm7nWeGAVQdOYjfBJG8balviciGBQzXxqayCE6XEGkbz6mWnhrTLDmmz29hxzvKxKRFekKxiAiuH+/UfrMZg3cSDsW+Hbsh/PgAgw0J18aM7/i/Me7/ACwqA/IvOH3XP7lfplpaChZXAJVtglMFe3HWl4CpbpMR0EMDltQAVR1iIWZeGKzMA3n5ANUsbxTkFwCLE67v65LB6gLsmIO2QwHmngTuDgh+fAFe3d/rMQISXFXlAs5d+h3+JWD8scGPNX/MAwNyMipUXAm8bIpPRiCCEXBzDZgOGyy/j4NQcabD9qZb1M6WH6Q3IFWr7nBgbKvzwGinAfsJXFoPOynDvTCSfHIuruGZ4OOky1Gf5g3ID1OlhWFYyJ1NB0jFbj4RC0U4VcZC1wGfo0C0N95PFdnfeyODgJzsWiMQ6TZYnARuPbFnjF1APicsmzqbYaYp+B4XMz9sMDvkntc+ErztdMZK1bwUtIZYc0BsyQCZc1SHitK9kaduLFVnP8H4jeUobDpkFLB1TDA7CMwMJgesfSiAuBDTtWqG2cG4SgRnvzq677afUVIqSAXuDPwZkBOPPtg7oaYF1Zwdirtd+6Ph/c0UDHtKQA5ueS02NOo8hpjuZcjPX3Yu1vDrx1UxDen8G5eDbMzBolKgryG1UbwAbXmpcEAMIVVlH3cLAhAyGaCCqzFY//i+On+8a2+tTGYYL0C7czx3RZZOVvdxIoJSh2C/1kxuc8FSFDRGYl7v52YvQL7MOqgJnphXrGvl9wSfp+lUg7J6t0cHSxFrpQJqwc6YgpyIK2YxZk1jmaBsrG22bwvQwwN3GOYq00BDrCFVQDVKcKtMW8GgUXTyKzWutvF3usCBafiZd1QyMcRME5qM+7TPducdYnXeUFO8nFCZ0nrByod4yWD+VbYKSkKwEAyjmoSG4js8BSWWpbQV1DAFd4nEj+r+m5sPW9iZAgy/7r8cz4MCd52Mn2b4cc0dhnFhOH5ILSx1JmHoqRqLsJ75qCgNxr15rMsfTBfvHWJ9gWbQE3NQQQIEc5DPguH23XsTo3JgwOBOoWXnYqWgsMydXpajTj0+Kwk5VfUUlOrkcuhC7fNhqkp1ubtoY8nhAcPnWJW2SXwgOYaK8ZcOVHCuQ4fYFzjdcf8AYCjGm80z6a70SN43+J79129Zf4HJ0GTjJSYvL9sncqp2L9F/5pqRbLlpJdyJHanbvUTXBGe4IaZZYP8NcbzGMfhugDkY6W+flH5l+gXPQW6akzXdQgAAAABJRU5ErkJggg==" alt="AI Model 2">
+                    </div>
+                    <div class="model-item">
+                        <img src="https://soar.hznhkj.cn/images/mj/Midjourney.png" alt="AI Model 3">
+                    </div>
+                    <div class="model-item">
+                        <img src="https://suno.cn/images/suno_logo.png" alt="AI Model 4">
+                    </div>
+                    <div class="model-item">
+                        <img src="https://img1.baidu.com/it/u=2141278985,2103469357&fm=253&app=120&size=w931&n=0&f=JPEG&fmt=auto?sec=1713546000&t=d51417baf965d134ab1c49398ef1da4e" alt="AI Model 5">
+                    </div>
+                    <div class="model-item">
+                        <img src="https://gimg3.baidu.com/topone/src=https%3A%2F%2Fbkimg.cdn.bcebos.com%2Fsmart%2F8cb1cb1349540923dd549d5e2f0fc609b3de9c82e3c1-bkimg-process%2Cv_1%2Crw_1%2Crh_1%2Cmaxl_800%2Cpad_1%3Fx-bce-process%3Dimage%2Fresize%2Cm_pad%2Cw_348%2Ch_348%2Ccolor_ffffff&refer=http%3A%2F%2Fwww.baidu.com&app=2011&size=w931&n=0&g=0n&er=404&q=75&fmt=auto&maxorilen2heic=2000000?sec=1713546000&t=b3a7b72704ed0ce48587e54a98be01b1" alt="AI Model 6">
+                    </div>
+                    <div class="model-item">
+                        <img src="https://bizaladdin-image.baidu.com/0/pic/-856892274_-597594076_647962062.jpg" alt="AI Model 7">
+                    </div>
+                    <div class="model-item">
+                        <img src="https://api.bltcy.ai/logos/deepseek.png" alt="...">
+                    </div>
+                </div>
+                
+                <div class="models-row">
+                    <div class="model-item">
+                        <img src="https://bizaladdin-image.baidu.com/0/pic/-198623191_-848819177_2123944374.jpg" alt="AI Model 8">
+                    </div>
+                    <div class="model-item">
+                        <img src="https://gimg3.baidu.com/topone/src=https%3A%2F%2Fbkimg.cdn.bcebos.com%2Fsmart%2F574e9258d109b3de9c8287f6fbe77b81800a18d8e6af-bkimg-process%2Cv_1%2Crw_1%2Crh_1%2Cmaxl_800%2Cpad_1%3Fx-bce-process%3Dimage%2Fresize%2Cm_pad%2Cw_348%2Ch_348%2Ccolor_ffffff&refer=http%3A%2F%2Fwww.baidu.com&app=2011&size=f200,200&n=0&g=0n&er=404&q=75&fmt=auto&maxorilen2heic=2000000?sec=1713546000&t=b26178d585ad85be69b792f843ed6557" alt="AI Model 9">
+                    </div>
+                    <div class="model-item">
+                        <img src="https://one-api.bltcy.top/logos/shangtang.png" alt="AI Model 10">
+                    </div>
+                    <div class="model-item">
+                        <img src="https://t9.baidu.com/it/u=4037406233,2778193482&fm=3035&app=3035&size=f242,150&n=0&f=JPEG&fmt=auto?s=93938C6C6E806F725896D209030060DD&sec=1713546000&t=c59fb6e23339d3b63fe1b4c57bcd262b" alt="AI Model 11">
+                    </div>
+                    <div class="model-item">
+                        <img src="https://gimg3.baidu.com/search/src=http%3A%2F%2Fgips2.baidu.com%2Fit%2Fu%3D2466552100%2C3345163661%26fm%3D3030%26app%3D3030%26f%3DJPEG%3Fw%3D200%26h%3D133%26s%3D78A6387217684D095065E0C60300F0B3&refer=http%3A%2F%2Fwww.baidu.com&app=2021&size=f242,150&n=0&g=0n&q=100&fmt=auto?sec=1713546000&t=edfbf4a8561bf28f5b2bb21743f73415" alt="AI Model 12">
+                    </div>
+                   
+                </div>
+            </div>
+        </section>
+        
+        <section class="advantages">
+            <h2 class="advantages-title">我们的优势</h2>
+            <div class="advantage-timeline">
+                <div class="advantage-item">
+                    <div class="advantage-icon blue">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M12 8v4l3 3"></path>
+                        </svg>
+                    </div>
+                    <div class="advantage-content">
+                        <div class="advantage-title">#1 API</div>
+                        <div class="advantage-description">100%使用官方企业高速通道，已稳定运行1年，承诺永久运营！</div>
+                        <div class="advantage-description">触及8个地区，超过5万客户</div>
+                    </div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon green">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <div class="advantage-content">
+                        <div class="advantage-title">兼容性与支持</div>
+                        <div class="advantage-description">完全兼容OpenAI接口协议，确保集成无误。</div>
+                        <div class="advantage-description">无缝对接OpenAI接口支持的应用</div>
+                    </div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon yellow">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                            <path d="M2 17l10 5 10-5"></path>
+                            <path d="M2 12l10 5 10-5"></path>
+                        </svg>
+                    </div>
+                    <div class="advantage-content">
+                        <div class="advantage-title">灵活计费</div>
+                        <div class="advantage-description">无需担心额度过期或封风险，MySQL8.2超高并发不限速，智能负载均衡计算法，日承接量超100万力。</div>
+                        <div class="advantage-description">按量计费保障灵活性</div>
+                    </div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon blue">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="2" y1="12" x2="22" y2="12"></line>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                    </div>
+                    <div class="advantage-content">
+                        <div class="advantage-title">全球布局</div>
+                        <div class="advantage-description">部署于右遍布OpenAI靠近的CN2线路服务器，自动负载均衡保障快速响应。</div>
+                        <div class="advantage-description">全球用户快速响应</div>
+                    </div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon orange">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <div class="advantage-content">
+                        <div class="advantage-title">服务保障</div>
+                        <div class="advantage-description">7*24小时自助充值，确保服务不会中断，支持开发腾公众对公。</div>
+                        <div class="advantage-description">服务不间断，使用无忧</div>
+                    </div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon purple">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path>
+                            <line x1="7" y1="7" x2="7.01" y2="7"></line>
+                        </svg>
+                    </div>
+                    <div class="advantage-content">
+                        <div class="advantage-title">透明计费</div>
+                        <div class="advantage-description">与官方计费倍率同步，公平无加盟，性价比最高的API源头，已有70+中转代理。</div>
+                        <div class="advantage-description">无隐藏费用，透明计费</div>
+                    </div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon pink">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+                            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+                            <line x1="6" y1="1" x2="6" y2="4"></line>
+                            <line x1="10" y1="1" x2="10" y2="4"></line>
+                            <line x1="14" y1="1" x2="14" y2="4"></line>
+                        </svg>
+                    </div>
+                    <div class="advantage-content">
+                        <div class="advantage-title">Midjourney</div>
+                        <div class="advantage-description">集成反代服务和中文翻译接口，实现高并发及快速响应。</div>
+                        <div class="advantage-description">支持最新版Midjourney Proxy Plus</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 添加 Footer Section -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-top">
+                <h2 class="footer-title">24/7/365 全天候支持</h2>
+                <p class="footer-subtitle">我们时刻恭候您</p>
+                <button 
+  class="contact-button" 
+  style="
+    padding: 10px 20px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  "
+  onclick="this.innerHTML = 'QQ: 2257628037'; this.style.backgroundColor = '#3a78e7'"
+  onmouseover="this.style.backgroundColor = '#3a78e7'"
+  onmouseout="this.style.backgroundColor = '#3a78e7'"
+>
+  联系我们
+</button>
+
+<script>
+  function animateButton(btn) {
+    const btnText = btn.querySelector('.btn-text');
+    const qqNumber = btn.querySelector('.qq-number');
+    
+    // Initial animation
+    btn.style.position = 'fixed';
+    btn.style.zIndex = '1000';
+    btn.style.transition = 'all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+    
+    // Calculate center position
+    const rect = btn.getBoundingClientRect();
+    const centerX = window.innerWidth/2 - rect.width/2 - rect.left;
+    const centerY = window.innerHeight/2 - rect.height/2 - rect.top;
+    
+    // Move to center and scale up
+    btn.style.transform = `translate(${centerX}px, ${centerY}px) scale(2)`;
+    
+    // After animation completes
+    setTimeout(() => {
+      btnText.style.display = 'none';
+      qqNumber.style.display = 'inline';
+      
+      // Add pulsing animation
+      btn.style.animation = 'pulse 1s infinite alternate';
+      
+      // Reset after 3 seconds
+      setTimeout(() => {
+        btn.style.animation = '';
+        btn.style.position = '';
+        btn.style.zIndex = '';
+        btn.style.transform = '';
+        btn.style.transition = 'all 0.3s ease';
+        btnText.style.display = 'inline';
+        qqNumber.style.display = 'none';
+      }, 3000);
+    }, 500);
+  }
+</script>
+
+<style>
+  @keyframes pulse {
+    from { transform: translate(calc(50vw - 50%), calc(50vh - 50%)) scale(2); }
+    to { transform: translate(calc(50vw - 50%), calc(50vh - 50%)) scale(2.1); }
+  }
+</style>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-links">
+                    <a href="#" class="footer-link">模型价格</a>
+                    <a href="#" class="footer-link">API文档</a>
+                    <a href="#" class="footer-link">服务条款</a>
+                    <a href="#" class="footer-link">隐私政策</a>
+                </div>
+                <div class="footer-copyright">
+                    <p>© 2025 exPansion AI. All Rights Reserved.</p>
+                    <p class="disclaimer">本站API适用于创造和体验目的，请自觉遵守您当地法律法规，切勿用于非法用途。本站不承担任何法律责任。</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+        <!-- 添加 Popup for API button -->
+    <div class="popup" id="api-popup">
+        <img src="https://nbclaude.com/images/api.expansion.chat9.jpg" alt="API Expansion">
+    </div>
+    
+      <script>
+        // Typing animation
+        const typingText = "现在，我们可以骄傲的向世界宣布，我们已经完全支持openai和claude的全部模型以及国产模型";
+        const typingElement = document.getElementById("typing-text");
+        let i = 0;
+        
+        function typeWriter() {
+            if (i < typingText.length) {
+                typingElement.innerHTML += typingText.charAt(i);
+                i++;
+                setTimeout(typeWriter, 150);
+            } else {
+                // Reset after typing is complete (optional)
+                setTimeout(() => {
+                    typingElement.innerHTML = "";
+                    i = 0;
+                    typeWriter();
+                }, 3000);
+            }
+        }
+        
+        // Start typing animation when page loads
+        window.onload = typeWriter;
+        
+        // Add hover functionality for the floating buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            const headphoneButton = document.getElementById('headphone-button');
+            const bellButton = document.getElementById('bell-button');
+            const apiPopup = document.getElementById('api-popup');
+            const notificationPopup = document.getElementById('notification-popup');
+            
+            function showPopup(popup) {
+                popup.style.display = 'block';
+                // 强制重排后添加动画
+                setTimeout(() => {
+                    popup.classList.add('show');
+                }, 10);
+            }
+            
+            function hidePopup(popup) {
+                popup.classList.remove('show');
+                // 等待动画完成后隐藏
+                setTimeout(() => {
+                    popup.style.display = 'none';
+                }, 300);
+            }
+            
+            headphoneButton.addEventListener('mouseenter', () => showPopup(apiPopup));
+            headphoneButton.addEventListener('mouseleave', () => hidePopup(apiPopup));
+            
+            bellButton.addEventListener('mouseenter', () => showPopup(notificationPopup));
+            bellButton.addEventListener('mouseleave', () => hidePopup(notificationPopup));
+        });
+
+        // 添加卡片鼠标跟随效果
+        const card = document.querySelector('.features-card');
+        if (card) {
+            card.addEventListener('mousemove', function(e) {
+                const rect = this.getBoundingClientRect();
+                const x = e.clientX - rect.left; // 鼠标在卡片内的X坐标
+                const y = e.clientY - rect.top;  // 鼠标在卡片内的Y坐标
+                
+                // 计算旋转角度，使其更加平滑和舒适
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                // 减小旋转角度，使其更加舒适
+                const rotateY = ((x - centerX) / centerX) * 5; // 最大旋转5度
+                const rotateX = ((centerY - y) / centerY) * 3; // 最大旋转3度
+                
+                // 应用变换，添加缓动效果
+                this.style.transform = `perspective(1500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            // 鼠标离开时恢复原状
+            card.addEventListener('mouseleave', function() {
+                this.style.transition = 'transform 0.5s ease-out';
+                this.style.transform = 'perspective(1500px) rotateX(1deg) rotateY(-8deg) rotateZ(0deg)';
+            });
+            
+            // 鼠标进入时的效果
+            card.addEventListener('mouseenter', function() {
+                this.style.transition = 'transform 0.2s ease-out';
+                setTimeout(() => {
+                    this.style.transition = 'transform 0.05s ease-out'; // 保留轻微过渡效果，使跟随更流畅
+                }, 200);
+            });
+        }
+    </script>
+</body>
+</html>
